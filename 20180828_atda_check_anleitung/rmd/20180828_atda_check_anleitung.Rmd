@@ -1,0 +1,30 @@
+---
+title: "Anleitung zur Überprüfung des EMM-Datentransfers"
+author: "Peter von Rohr"
+date: "8/28/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_hooks$set(hook_convert_odg = rmddochelper::hook_convert_odg)
+```
+
+## Erklärung
+Diese Dokument gibt eine Anleitung zu den verschiedenen Überprüfungen (Checks) im Zusammenhang mit dem Transfer von EMM-Daten in ATDA-ASR.
+
+
+## Anmeldung eines Betriebs zu ATDA-ASR
+Bevor ein Betrieb sich zu ATDA-ASR anmeldet, soll er vom Roboter die TVD-Nummern der Kühe exportieren und diese elektronisch an die Zuchtorganisation (ZO) schicken. Die exportierten TVD-Nummern der Kühe sollen in einer Datei abgelegt werden, wobei die TVD-Nummern alle in einer Kolonnen untereinander stehen sollen. Also Überschrift der Kolonnen mit den TVD-Nummern soll `LifeNumber` stehen. Für eine umfangreiche Überprüfung soll auch die ARGUS-Datenbank-ID des Betriebs mit der Überschrift `BetriebId` in einer zweiten Kolonne angegeben werden. Die Datei mit diesen Informationen soll als csv-Datei im Inputverzeichnis der Datenschnittstelle (DSCH) gespeichert werden. Ein Beispiel für eine solche Inputdatei ist im nachfolgenden Screenshot gezeigt.
+
+```{r checklifenumberinput, echo=FALSE, hook_convert_odg=TRUE, fig_path="../odg"}
+#rmddochelper::use_odg_graphic(ps_path = "../odg/checklifenumberinput.odg")
+knitr::include_graphics(path = "../odg/checklifenumberinput.png")
+```
+  
+Den Namen der Inputdatei verwenden wir im Anschluss für den Aufruf des Jobs `Ueberprufung der Lifenumbers vom Roboter` in der Jobverwaltung. Das Programm hinter diesem Job überprüft die TVD-Nummern auf dem Roboter. Eine erste Art der Überprüfung ist das Format der TVD-Nummern. Das verlangte Format lautet: zwei Zeichen als Ländercode gefolgt von zwölf Ziffern. Es sollen keine Leerzeichen oder Punkte in der TVD-Nummer vorkommen. 
+
+In einem zweiten Schritt suchen wir die Kühe, welche zu den TVD-Nummern vom Roboter passen. Zu den gefundenen Kühe listen wir weitere Informationen und den Standort der Kühe gemäss der Datenbank ARGUS auf. Hier ist es wichtig dass der Standort mit dem bei ATDA-ASR anzumeldenden Betrieb übereinstimmt. Andernfalls stimmen entweder der Standort oder die TVD-Nummer nicht. 
+
+Auf einer zweiten Liste werden alle Tiere vom anzumeldenden Betrieb, welche gemäss Argus eine laufende Laktation haben, deren TVD-Nummer aber nicht auf dem Roboter gespeichert ist, aufgelistet. Bei diesen Tieren ist es wichtig die Nummer zu überprüfen. 
+
